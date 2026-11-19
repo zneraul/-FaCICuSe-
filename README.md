@@ -1,11 +1,28 @@
-<div align="center">
+# FaCICuSe — Connected Insights, Coordinated Spaces
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+FaCICuSe is a facility discovery, reservation coordination, scheduling, maintenance reporting, and administrative management system for the **College of Informatics and Computing Sciences (CICS) Building** at **Batangas State University – Alangilan Campus**.
 
-  <h1>Built with AI Studio</h2>
+## Project Structure (Hexagonal / Ports & Adapters)
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+- `client/` — Pure JavaScript React (`JSX`) workspace + standalone HTML5 public landing page.
+  - `client/public/` — Standalone HTML5 homepage (`index.html`), custom CSS design system (`assets/css/`), Vanilla JS (`assets/js/`), and organized brand/facility media (`assets/images/`).
+  - `client/components/` — Shared layout shells (`PublicLayout`, `AppShell`), `FacilityImage`, and `ErrorBoundary`.
+  - `client/context/` — Authentication (`AuthContext`) and synchronized real-time notification state (`NotificationContext`).
+  - `client/pages/` — Public directory, sign-in, student/professor workspace, and admin-only management & analytics views.
+  - `client/services/` — Backend REST API client and Firebase client adapter.
+- `server/domain/` — Pure JavaScript domain entities, canonical 37 CICS Building facility catalog (`projectInfo.js`), value objects (`TimeSlot`, `EmailDomainPolicy`), business rules, and unit tests (`rules.test.js`).
+- `server/application/` — Application port contracts (`ports.js`) and use cases (`facilityUseCases`, `reservationUseCases`, `maintenanceUseCases`, `userUseCases`, `dashboardUseCases`, `analyticsUseCases`).
+- `server/adapters/inbound/` — Express REST routes, authentication/role middleware, HTTP controllers, and domain error mapping.
+- `server/adapters/outbound/` — PostgreSQL Drizzle repositories, local runtime store, Firebase Admin auth adapter, password hasher, and seed service.
+- `server/infrastructure/` — Environment configuration and Composition Root (`container.js`).
+- `src/db/` — PostgreSQL Drizzle connection and schema definitions.
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## Environment Configuration
 
-</div>
+See `.env.example` for all required environment variables (`PORT`, `APP_URL`, PostgreSQL credentials, `ALLOWED_UNIVERSITY_DOMAINS`, `ADMIN_BOOTSTRAP_EMAILS`, and `SESSION_SECRET`).
+
+## Scripts
+
+- Unit Tests: `npm test`
+- Development Server: `npm run dev` (Express + Vite middleware on port `3000`)
+- Production Build: `npm run build` followed by `npm start`
