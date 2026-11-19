@@ -101,7 +101,7 @@ export function PublicTimetablePage() {
             </div>
             <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
               <Link to="/facilities" className="btn btn-glass btn-sm">
-                Browse All 37 Spaces
+                Browse All 38 Spaces
               </Link>
               <Link to="/app/calendar" className="btn btn-coral btn-sm">
                 <CalendarDays size={15} aria-hidden="true" />

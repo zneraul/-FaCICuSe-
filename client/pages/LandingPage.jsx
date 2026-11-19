@@ -200,7 +200,7 @@ export function LandingPage() {
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.85rem', marginTop: '0.35rem' }}>
             <Link to="/facilities" className="btn btn-coral">
-              <span>Browse All {allFacilities.length || 37} Spaces</span>
+              <span>Browse All {allFacilities.length || 38} Spaces</span>
               <ArrowRight size={17} aria-hidden="true" />
             </Link>
             <Link to="/timetable" className="btn btn-glass">View Class Timetable</Link>
@@ -231,7 +231,7 @@ export function LandingPage() {
           >
             <div>
               <dd className="tabular" style={{ margin: 0, fontSize: '1.35rem', fontWeight: 700, color: 'var(--accent-blue)' }}>
-                {allFacilities.length || '37'}
+                {allFacilities.length || '38'}
               </dd>
               <dt style={{ fontSize: '0.78rem', color: 'var(--ink-muted)' }}>CICS spaces</dt>
             </div>
@@ -272,7 +272,7 @@ export function LandingPage() {
               College of Informatics and Computing Sciences (CICS)
             </div>
             <div style={{ fontSize: '0.82rem', color: 'rgba(238,242,255,0.86)', marginTop: '0.2rem' }}>
-              5-Floor College Building · 1 Building · 5 Floors · 37 Facilities
+              5-Floor College Building · 1 Building · 5 Floors · 38 Facilities
             </div>
           </figcaption>
         </figure>
@@ -714,7 +714,7 @@ export function LandingPage() {
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.85rem' }}>
             <Link to="/facilities" className="btn btn-on-coral">
-              <span>Explore All {allFacilities.length || 37} Spaces</span>
+              <span>Explore All {allFacilities.length || 38} Spaces</span>
               <ArrowRight size={17} aria-hidden="true" />
             </Link>
             <Link to="/timetable" className="btn btn-glass btn-sm">

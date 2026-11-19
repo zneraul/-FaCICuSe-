@@ -341,7 +341,7 @@ export function DashboardPage() {
                 to="/app/facilities"
                 style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--accent-blue)' }}
               >
-                All 37 Spaces →
+                All 38 Spaces →
               </Link>
             </div>
 

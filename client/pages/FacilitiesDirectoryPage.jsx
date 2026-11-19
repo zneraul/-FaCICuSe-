@@ -356,7 +356,7 @@ export function FacilitiesDirectoryPage({ authenticated = false }) {
       <div style={{ marginBottom: '1.25rem' }}>
         <h1 style={{ fontSize: '1.85rem', fontWeight: 700 }}>CICS Building Facility Directory</h1>
         <p style={{ color: 'var(--ink-secondary)', marginTop: '0.3rem' }}>
-          Browse all 37 Learning, Administrative, and Support spaces across the 5-floor CICS Building.
+          Browse all 38 Learning, Administrative, and Support spaces across the 5-floor CICS Building.
         </p>
       </div>
       {content}
