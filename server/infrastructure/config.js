@@ -34,7 +34,7 @@ export function validateRuntimeConfig(env = process.env) {
   const isProduction = env.NODE_ENV === 'production';
   const postgresReady = isPostgresConfigured(env);
 
-  if (isProduction) {
+  if (isProduction && !isConfiguredValue(env.DATABASE_URL)) {
     const missing = [];
     if (!isConfiguredValue(env.SQL_HOST)) missing.push('SQL_HOST');
     if (!isConfiguredValue(env.SQL_DB_NAME)) missing.push('SQL_DB_NAME');
