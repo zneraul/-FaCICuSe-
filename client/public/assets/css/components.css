@@ -1054,7 +1054,7 @@ a.stat-card:hover {
   bottom: 1rem;
   padding: 0.85rem 1.05rem;
   border-radius: var(--radius-sm);
-  background: rgba(11, 30, 61, 0.80);
+  background: var(--accent-blue);
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.18);
