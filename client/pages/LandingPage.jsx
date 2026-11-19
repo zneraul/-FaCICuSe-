@@ -984,6 +984,9 @@ export function LandingPage() {
               <span>Explore Facilities</span>
               <ArrowRight size={17} aria-hidden="true" />
             </Link>
+            <Link to="/timetable" className="btn btn-glass btn-sm">
+              <span>View Class Timetable</span>
+            </Link>
             {user ? (
               <Link
                 to="/app/dashboard"

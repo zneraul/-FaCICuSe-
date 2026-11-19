@@ -44,13 +44,6 @@ export function PublicLayout({ children }) {
             >
               Facilities
             </Link>
-            <Link
-              to="/timetable"
-              className={`public-nav-link ${isTimetableActive ? 'active' : ''}`}
-              aria-current={isTimetableActive ? 'page' : undefined}
-            >
-              Timetable
-            </Link>
             <a href="/#reservations" className="public-nav-link">
               Availability
             </a>
@@ -99,13 +92,6 @@ export function PublicLayout({ children }) {
               onClick={() => setMobileMenuOpen(false)}
             >
               Facilities
-            </Link>
-            <Link
-              to="/timetable"
-              className={`public-mobile-link ${isTimetableActive ? 'active' : ''}`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Timetable
             </Link>
             <a
               href="/#reservations"
