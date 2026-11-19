@@ -7,18 +7,29 @@ const sqlHost = process.env.SQL_HOST;
 const sqlDbName = process.env.SQL_DB_NAME;
 const user = process.env.SQL_ADMIN_USER;
 const password = process.env.SQL_ADMIN_PASSWORD;
+const databaseUrl = process.env.DATABASE_URL;
 
-if (!sqlHost) {
-  throw new Error('SQL_HOST must be set in environment variables.');
-}
-if (!sqlDbName) {
-  throw new Error('SQL_DB_NAME must be set in environment variables.');
-}
-if (!user) {
-  throw new Error('SQL_ADMIN_USER must be set in environment variables.');
-}
-if (!password) {
-  throw new Error('SQL_ADMIN_PASSWORD must be set in environment variables.');
+const useSsl =
+  String(process.env.SQL_SSL || '').toLowerCase() === 'true' ||
+  String(sqlHost || '').includes('neon') ||
+  Boolean(databaseUrl && databaseUrl.includes('neon'));
+
+let dbCredentials;
+if (databaseUrl) {
+  dbCredentials = { url: databaseUrl, ssl: useSsl };
+} else {
+  if (!sqlHost) throw new Error('SQL_HOST must be set in environment variables.');
+  if (!sqlDbName) throw new Error('SQL_DB_NAME must be set in environment variables.');
+  if (!user) throw new Error('SQL_ADMIN_USER must be set in environment variables.');
+  if (!password) throw new Error('SQL_ADMIN_PASSWORD must be set in environment variables.');
+  dbCredentials = {
+    host: sqlHost,
+    port: process.env.SQL_PORT ? Number(process.env.SQL_PORT) : 5432,
+    user,
+    password,
+    database: sqlDbName,
+    ssl: useSsl,
+  };
 }
 
 export default defineConfig({
@@ -26,12 +37,6 @@ export default defineConfig({
   out: './drizzle',
   dialect: 'postgresql',
   schemaFilter: ['public'],
-  dbCredentials: {
-    host: sqlHost,
-    user,
-    password,
-    database: sqlDbName,
-    ssl: false,
-  },
+  dbCredentials,
   verbose: true,
 });

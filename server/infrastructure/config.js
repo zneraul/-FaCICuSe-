@@ -9,6 +9,9 @@ function isConfiguredValue(value) {
 }
 
 export function isPostgresConfigured(env = process.env) {
+  if (isConfiguredValue(env.DATABASE_URL)) {
+    return true;
+  }
   return Boolean(
     isConfiguredValue(env.SQL_HOST) &&
       isConfiguredValue(env.SQL_DB_NAME) &&
