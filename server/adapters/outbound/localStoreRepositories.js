@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ACTIVE_BLOCKING_STATUSES } from '../../domain/entities.js';
 import { ConflictError } from '../../domain/errors.js';
-import { CICS_FACILITY_CATALOG } from '../../domain/projectInfo.js';
+import { CICS_FACILITY_CATALOG, CICS_FACILITY_RENAMED_CODES } from '../../domain/projectInfo.js';
 import { TimeSlot } from '../../domain/valueObjects.js';
 import {
   ClassScheduleSource,
@@ -143,12 +143,20 @@ export function createLocalStoreAdapters({ storeFilePath = DEFAULT_STORE_FILE } 
         const raw = fs.readFileSync(storeFilePath, 'utf8');
         const parsed = JSON.parse(raw);
         if (parsed && Array.isArray(parsed.facilities) && Array.isArray(parsed.users)) {
-          // Ensure canonical 37 CICS facilities are always present without inserting demo accounts
+          // Ensure canonical 38 CICS facilities are always present without inserting demo accounts
           const existingCodes = new Set(parsed.facilities.map((f) => f.code));
           const now = new Date().toISOString();
           let changed = false;
           for (const room of CICS_FACILITY_CATALOG) {
-            if (!existingCodes.has(room.code)) {
+            if (existingCodes.has(room.code)) {
+              if (CICS_FACILITY_RENAMED_CODES.includes(room.code)) {
+                const existing = parsed.facilities.find((facility) => facility.code === room.code);
+                if (existing && existing.name !== room.name) {
+                  existing.name = room.name;
+                  changed = true;
+                }
+              }
+            } else {
               parsed.counters.facilities = (parsed.counters.facilities || parsed.facilities.length) + 1;
               parsed.facilities.push({
                 id: parsed.counters.facilities,
@@ -587,6 +595,18 @@ export function createLocalStoreAdapters({ storeFilePath = DEFAULT_STORE_FILE } 
       state.users.push(created);
       saveState();
       return sanitizePublicUser(created);
+    },
+
+    async setPasswordByUid(uid, passwordHash) {
+      const idx = state.users.findIndex((u) => u.uid === uid);
+      if (idx === -1) return null;
+      state.users[idx] = {
+        ...state.users[idx],
+        passwordHash,
+        authProvider: 'google+password',
+      };
+      saveState();
+      return sanitizePublicUser(state.users[idx]);
     },
 
     async markEmailVerified(id) {

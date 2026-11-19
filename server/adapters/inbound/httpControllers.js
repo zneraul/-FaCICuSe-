@@ -84,23 +84,43 @@ export function createHttpControllers({
 
       res.cookie(SESSION_COOKIE_NAME, token, {
         httpOnly: true,
-        sameSite: isHttps ? 'none' : 'lax',
+        sameSite: 'lax',
         secure: isHttps,
         path: '/',
         maxAge: 1000 * 60 * 60 * 24,
       });
 
-      res.json({
-        sessionToken: token,
-        user: serializeSessionUser(user),
+      res.json({ user: serializeSessionUser(user) });
+    },
+
+    async createGoogleSession(req, res) {
+      if (!req.actor?.uid) {
+        return res.status(401).json({ error: 'Unable to establish a session for this account.' });
+      }
+
+      const token = authProvider.issueSessionToken(req.actor.uid, 'user');
+      const isHttps = isHttpsRequest(req);
+      res.cookie(SESSION_COOKIE_NAME, token, {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: isHttps,
+        path: '/',
+        maxAge: 1000 * 60 * 60 * 24,
       });
+
+      res.json({ user: serializeSessionUser(req.actor) });
+    },
+
+    async setOwnPassword(req, res) {
+      await userUseCases.setOwnPassword(req.actor, req.body || {});
+      res.json({ ok: true });
     },
 
     async clearSession(req, res) {
       const isHttps = isHttpsRequest(req);
       const cookieOpts = {
         httpOnly: true,
-        sameSite: isHttps ? 'none' : 'lax',
+        sameSite: 'lax',
         secure: isHttps,
         path: '/',
       };

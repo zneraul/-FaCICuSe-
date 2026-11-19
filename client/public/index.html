@@ -51,7 +51,7 @@
 
           <nav class="public-nav-links" aria-label="Primary navigation">
             <a href="#home" class="public-nav-link active" aria-current="location" data-section-link="home">Home</a>
-            <a href="#facilities" class="public-nav-link">Facilities</a>
+            <a href="#facilities" class="public-nav-link" data-section-link="facilities">Facilities</a>
             <a href="#reservations" class="public-nav-link" data-section-link="reservations">Availability</a>
             <a href="#about" class="public-nav-link" data-section-link="about">How It Works</a>
           </nav>
@@ -77,7 +77,7 @@
 
         <nav id="public-mobile-menu" class="public-mobile-drawer" aria-label="Mobile section navigation" hidden>
           <a href="#home" class="public-mobile-link active" aria-current="location" data-section-link="home">Home</a>
-          <a href="#facilities" class="public-mobile-link">Facilities</a>
+          <a href="#facilities" class="public-mobile-link" data-section-link="facilities">Facilities</a>
           <a href="#reservations" class="public-mobile-link" data-section-link="reservations">Availability</a>
           <a href="#about" class="public-mobile-link" data-section-link="about">How It Works</a>
           <a href="/signin" id="mobile-auth-cta" class="public-mobile-link" data-open-auth-modal>Sign In</a>
@@ -115,21 +115,29 @@
 
             <div class="hero-cta-row">
               <a href="/facilities" class="btn btn-coral">
-                <span>Browse All 37 Spaces</span>
+                <span>Browse All 38 Spaces</span>
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M5 12h14"></path>
                   <path d="m12 5 7 7-7 7"></path>
                 </svg>
               </a>
-              <a href="/timetable" class="btn btn-glass">
+              <a href="/timetable" class="btn btn-timetable" aria-label="View the class timetable">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                  <path d="M16 3v4M8 3v4M3 10h18"></path>
+                  <path d="m9 15 2 2 4-4"></path>
+                </svg>
                 <span>View Class Timetable</span>
+                <svg class="btn-timetable-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
+                </svg>
               </a>
               <a href="/signin" id="hero-auth-cta" class="btn btn-glass" data-open-auth-modal>Sign In to Workspace</a>
             </div>
 
             <dl class="hero-stats-dl">
               <div>
-                <dd id="hero-stat-total" class="tabular hero-stat-val hero-stat-val--blue">37</dd>
+                <dd id="hero-stat-total" class="tabular hero-stat-val hero-stat-val--blue">38</dd>
                 <dt class="hero-stat-label">CICS spaces</dt>
               </div>
               <div>
@@ -155,7 +163,7 @@
               </div>
               <div class="hero-caption-sub">
                 <span data-project-field="buildingScope.label">5-Floor College Building</span> ·
-                <span data-project-field="buildingScope.summary">1 Building · 5 Floors · 37 Facilities</span>
+                <span data-project-field="buildingScope.summary">1 Building · 5 Floors · 38 Facilities</span>
               </div>
             </figcaption>
           </figure>
@@ -205,9 +213,9 @@
 
           <div class="tabs-scroll-wrap">
             <div class="v10-tabs" role="tablist" aria-label="Facility categories" id="landing-category-tabs">
-              <button type="button" role="tab" aria-selected="true" class="v10-tab-btn active" data-category="All">All (37)</button>
+              <button type="button" role="tab" aria-selected="true" class="v10-tab-btn active" data-category="All">All (38)</button>
               <button type="button" role="tab" aria-selected="false" class="v10-tab-btn" data-category="Learning">Learning (26)</button>
-              <button type="button" role="tab" aria-selected="false" class="v10-tab-btn" data-category="Administrative">Administrative (6)</button>
+              <button type="button" role="tab" aria-selected="false" class="v10-tab-btn" data-category="Administrative">Administrative (7)</button>
               <button type="button" role="tab" aria-selected="false" class="v10-tab-btn" data-category="Support">Support (5)</button>
             </div>
 
@@ -350,7 +358,7 @@
               </p>
             </div>
             <div class="hero-cta-row">
-              <a href="/facilities" class="btn btn-glass btn-sm">Browse All 37 Spaces</a>
+
             </div>
           </div>
 
@@ -497,7 +505,7 @@
 
             <div class="hero-cta-row">
               <a href="/facilities" class="btn btn-on-coral">
-                <span>Explore All 37 Spaces</span>
+                <span>Explore All 38 Spaces</span>
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M5 12h14"></path>
                   <path d="m12 5 7 7-7 7"></path>
@@ -544,7 +552,7 @@
             <strong class="footer-col-title">Quick Links</strong>
             <div class="footer-links-list">
               <a href="#home" data-section-link="home">Home</a>
-              <a href="/facilities">CICS Directory (37 Rooms)</a>
+              <a href="/facilities">CICS Directory (38 Rooms)</a>
               <a href="/timetable">Class Timetable</a>
               <a href="#reservations" data-section-link="reservations">Live Availability</a>
               <a href="#about" data-section-link="about">How It Works</a>
@@ -632,7 +640,7 @@
           </div>
 
           <div class="auth-modal-field">
-            <label for="auth-modal-password" class="auth-modal-label">Password</label>
+            <label for="auth-modal-password" class="auth-modal-label">FaCICuSe Password</label>
             <div class="auth-modal-input-wrap">
               <input
                 id="auth-modal-password"
@@ -641,7 +649,7 @@
                 required
                 autocomplete="current-password"
                 class="auth-modal-input auth-modal-input--password"
-                placeholder="Enter your password"
+                placeholder="Enter your FaCICuSe password"
               />
               <button
                 type="button"
@@ -664,10 +672,32 @@
             </div>
           </div>
 
+          <p class="auth-modal-footnote">This password is separate from your university Google password. If you have not set a FaCICuSe password, use the University Google sign-in option.</p>
+
           <button type="submit" id="auth-modal-submit" class="auth-modal-submit">
             <span>Sign In with University Email</span>
           </button>
         </form>
+
+        <button type="button" id="auth-modal-password-setup-trigger" class="auth-modal-setup-trigger">Need a separate FaCICuSe password? Set one up</button>
+
+        <div id="auth-modal-password-setup-panel" class="auth-modal-password-setup" hidden>
+          <p class="auth-modal-footnote">Verify your university Google account first. Then create a separate FaCICuSe password that you can use with your university email.</p>
+          <button type="button" id="auth-modal-password-setup-google" class="auth-modal-google-btn">
+            Verify with University Google Account
+          </button>
+          <form id="auth-modal-password-setup-form" class="auth-modal-form" hidden>
+            <div class="auth-modal-field">
+              <label for="auth-modal-new-password" class="auth-modal-label">New FaCICuSe Password</label>
+              <input id="auth-modal-new-password" type="password" class="auth-modal-input" autocomplete="new-password" minlength="12" maxlength="128" required placeholder="At least 12 characters" />
+            </div>
+            <div class="auth-modal-field">
+              <label for="auth-modal-confirm-password" class="auth-modal-label">Confirm FaCICuSe Password</label>
+              <input id="auth-modal-confirm-password" type="password" class="auth-modal-input" autocomplete="new-password" minlength="12" maxlength="128" required placeholder="Re-enter your new password" />
+            </div>
+            <button type="submit" id="auth-modal-password-setup-submit" class="auth-modal-submit">Save FaCICuSe Password</button>
+          </form>
+        </div>
 
         <div class="auth-modal-divider" aria-hidden="true">or continue with</div>
 

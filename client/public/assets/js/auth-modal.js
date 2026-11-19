@@ -1,8 +1,6 @@
 'use strict';
 
 (function initFacicuseAuthModal() {
-  const USER_TOKEN_STORAGE_KEY = 'facicuse_user_session_token';
-
   const backdrop = document.getElementById('auth-modal-backdrop');
   const dialog = document.getElementById('auth-modal-dialog');
   const closeBtn = document.getElementById('auth-modal-close');
@@ -12,6 +10,13 @@
   const togglePasswordBtn = document.getElementById('auth-modal-toggle-password');
   const submitBtn = document.getElementById('auth-modal-submit');
   const googleBtn = document.getElementById('auth-modal-google-btn');
+  const passwordSetupTrigger = document.getElementById('auth-modal-password-setup-trigger');
+  const passwordSetupPanel = document.getElementById('auth-modal-password-setup-panel');
+  const passwordSetupGoogleBtn = document.getElementById('auth-modal-password-setup-google');
+  const passwordSetupForm = document.getElementById('auth-modal-password-setup-form');
+  const newPasswordInput = document.getElementById('auth-modal-new-password');
+  const confirmPasswordInput = document.getElementById('auth-modal-confirm-password');
+  const passwordSetupSubmit = document.getElementById('auth-modal-password-setup-submit');
   const alertBox = document.getElementById('auth-modal-alert');
   const alertText = document.getElementById('auth-modal-alert-text');
   const alertIcon = document.getElementById('auth-modal-alert-icon');
@@ -29,20 +34,9 @@
     allowedDomainsConfigured: true,
     firebaseConfig: null,
     firebaseModPromise: null,
+    passwordSetupIdToken: null,
     closeTimer: null,
   };
-
-  function writeSessionToken(key, value) {
-    try {
-      if (value) {
-        window.sessionStorage.setItem(key, value);
-      } else {
-        window.sessionStorage.removeItem(key);
-      }
-    } catch {
-      // Ignore browser storage restrictions; httpOnly cookie still handles sessions
-    }
-  }
 
   function resolvePostLoginPath(user, requestedPath) {
     const role = String(user && user.role ? user.role : '').toLowerCase();
@@ -125,6 +119,10 @@
     if (emailInput) emailInput.disabled = isBusy;
     if (passwordInput) passwordInput.disabled = isBusy;
     if (togglePasswordBtn) togglePasswordBtn.disabled = isBusy;
+    if (passwordSetupGoogleBtn) passwordSetupGoogleBtn.disabled = isBusy;
+    if (newPasswordInput) newPasswordInput.disabled = isBusy;
+    if (confirmPasswordInput) confirmPasswordInput.disabled = isBusy;
+    if (passwordSetupSubmit) passwordSetupSubmit.disabled = isBusy;
 
     if (submitBtn) {
       submitBtn.disabled = isBusy;
@@ -260,7 +258,7 @@
       return;
     }
     if (!rawPassword) {
-      setAlert('error', 'Please enter your university account password.');
+      setAlert('error', 'Please enter your FaCICuSe password.');
       if (passwordInput) passwordInput.focus();
       return;
     }
@@ -281,9 +279,6 @@
         throw new Error(data.error || 'Invalid university email or password.');
       }
 
-      if (data.sessionToken) {
-        writeSessionToken(USER_TOKEN_STORAGE_KEY, data.sessionToken);
-      }
       completeRedirect(data.user);
     } catch (error) {
       setBusy('');
@@ -320,7 +315,6 @@
     if (state.busy) return;
     setAlert('', '');
     setBusy('google');
-    writeSessionToken(USER_TOKEN_STORAGE_KEY, null);
 
     let fbBridge = null;
     try {
@@ -328,8 +322,8 @@
       const result = await fbBridge.signInWithPopup(fbBridge.auth, fbBridge.provider);
       const idToken = await result.user.getIdToken();
 
-      const response = await fetch('/api/auth/me', {
-        method: 'GET',
+      const response = await fetch('/api/auth/session/google', {
+        method: 'POST',
         credentials: 'include',
         headers: { Authorization: 'Bearer ' + idToken },
       });
@@ -356,6 +350,97 @@
       } else {
         setAlert('error', error.message || 'Google Sign-In did not complete.');
       }
+    }
+  }
+
+  async function handlePasswordSetupGoogle() {
+    if (state.busy) return;
+    setAlert('', '');
+    setBusy('google-setup');
+
+    try {
+      const fbBridge = await loadFirebaseAuthBridge();
+      const result = await fbBridge.signInWithPopup(fbBridge.auth, fbBridge.provider);
+      const idToken = await result.user.getIdToken();
+      const response = await fetch('/api/auth/me', {
+        method: 'GET',
+        credentials: 'include',
+        headers: { Authorization: 'Bearer ' + idToken },
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.error || 'Unable to verify your university Google account.');
+      }
+
+      state.passwordSetupIdToken = idToken;
+      if (passwordSetupGoogleBtn) passwordSetupGoogleBtn.hidden = true;
+      if (passwordSetupForm) passwordSetupForm.hidden = false;
+      setBusy('');
+      setAlert('success', 'University account verified. Create your separate FaCICuSe password below.');
+      if (newPasswordInput) newPasswordInput.focus();
+    } catch (error) {
+      setBusy('');
+      setAlert('error', error.message || 'Unable to verify your university Google account.');
+    }
+  }
+
+  async function handlePasswordSetupSubmit(event) {
+    event.preventDefault();
+    if (state.busy) return;
+    if (!state.passwordSetupIdToken) {
+      setAlert('error', 'Verify your university Google account before setting a password.');
+      return;
+    }
+
+    const password = newPasswordInput ? newPasswordInput.value : '';
+    const confirmPassword = confirmPasswordInput ? confirmPasswordInput.value : '';
+    if (password.length < 12) {
+      setAlert('error', 'Choose a FaCICuSe password with at least 12 characters.');
+      if (newPasswordInput) newPasswordInput.focus();
+      return;
+    }
+    if (password.length > 128) {
+      setAlert('error', 'Your FaCICuSe password must be 128 characters or fewer.');
+      if (newPasswordInput) newPasswordInput.focus();
+      return;
+    }
+    if (password !== confirmPassword) {
+      setAlert('error', 'The password confirmation does not match.');
+      if (confirmPasswordInput) confirmPasswordInput.focus();
+      return;
+    }
+
+    setBusy('password-setup');
+    try {
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + state.passwordSetupIdToken,
+      };
+      const response = await fetch('/api/auth/password', {
+        method: 'POST',
+        credentials: 'include',
+        headers,
+        body: JSON.stringify({ password, confirmPassword }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.error || 'Unable to save your FaCICuSe password.');
+      }
+
+      const sessionResponse = await fetch('/api/auth/session/google', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { Authorization: 'Bearer ' + state.passwordSetupIdToken },
+      });
+      const sessionData = await sessionResponse.json().catch(() => ({}));
+      if (!sessionResponse.ok) {
+        throw new Error(sessionData.error || 'Password saved, but the sign-in session could not be established.');
+      }
+
+      completeRedirect(sessionData.user);
+    } catch (error) {
+      setBusy('');
+      setAlert('error', error.message || 'Unable to save your FaCICuSe password.');
     }
   }
 
@@ -442,6 +527,20 @@
     });
 
     form.addEventListener('submit', handleEmailSubmit);
+
+    if (passwordSetupTrigger && passwordSetupPanel) {
+      passwordSetupTrigger.addEventListener('click', () => {
+        passwordSetupPanel.hidden = false;
+        passwordSetupTrigger.hidden = true;
+        setAlert('info', 'You can create a separate FaCICuSe password after verifying your university Google account.');
+      });
+    }
+    if (passwordSetupGoogleBtn) {
+      passwordSetupGoogleBtn.addEventListener('click', handlePasswordSetupGoogle);
+    }
+    if (passwordSetupForm) {
+      passwordSetupForm.addEventListener('submit', handlePasswordSetupSubmit);
+    }
 
     if (togglePasswordBtn && passwordInput) {
       togglePasswordBtn.addEventListener('click', () => {
