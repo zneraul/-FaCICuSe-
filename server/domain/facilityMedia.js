@@ -57,9 +57,7 @@ export const FACILITY_IMAGE_BY_CODE = Object.freeze({
   'CICS-4F-SMART': FLOOR_PHOTO('4th Floor', 'SMART Classroom.jpeg'),
   'CICS-4F-EDL': FLOOR_PHOTO('4th Floor', 'Electronics Distance Learning.jpeg'),
   'CICS-4F-TECH': FLOOR_PHOTO('4th Floor', 'Technicians’ Room.jpeg'),
-  // The original source is HEIC. Keep the exact photograph mapping; verify
-  // browser decoding before replacing it with a converted derivative.
-  'CICS-4F-ITL': FLOOR_PHOTO('4th Floor', 'Information Technology Laboratory.HEIC'),
+'CICS-4F-ITL': FLOOR_PHOTO('4th Floor', 'Information Technology Laboratory.jpeg'),
 
   'CICS-501': FLOOR_PHOTO('5th Floor', 'Room 501.jpeg'),
   'CICS-502': FLOOR_PHOTO('5th Floor', 'Room 502.jpeg'),
