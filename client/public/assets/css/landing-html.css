@@ -68,12 +68,12 @@
 .hero-caption-title {
   font-weight: 600;
   font-size: 0.94rem;
-  color: #ffffff;
+  color: var(--accent-blue);
 }
 
 .hero-caption-sub {
   font-size: 0.8rem;
-  color: rgba(248, 250, 252, 0.88);
+  color: var(--accent-blue);
   margin-top: 0.15rem;
 }
 
