@@ -317,8 +317,6 @@ export function AppShell({ title, primaryAction, children }) {
             </div>
 
             <div className="app-topbar-actions">
-              {primaryAction}
-
               <div className="popover-anchor" ref={notifContainerRef}>
                 <button
                   ref={notifButtonRef}
