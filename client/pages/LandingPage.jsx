@@ -252,9 +252,20 @@ export function LandingPage() {
 
         <figure className="landing-hero-media" style={{ margin: 0 }}>
           <img
-            src="/assets/images/cics-building.jpg"
-            alt="Batangas State University Alangilan CICS facility environment"
+            src="/assets/images/facilities/Building/Wider.jpeg"
+            alt="Batangas State University Alangilan CICS building exterior"
+            fetchPriority="high"
+            decoding="async"
             referrerPolicy="no-referrer"
+            onError={(event) => {
+              const image = event.currentTarget;
+              if (image.dataset.fallbackApplied) {
+                image.style.display = 'none';
+                return;
+              }
+              image.dataset.fallbackApplied = 'true';
+              image.src = '/assets/images/cics-building.jpg';
+            }}
           />
           <figcaption className="landing-hero-caption">
             <div style={{ fontWeight: 600, fontSize: '0.96rem' }}>
